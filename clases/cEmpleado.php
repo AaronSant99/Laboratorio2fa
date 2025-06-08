@@ -34,7 +34,7 @@ class cEmpleado
 		$val = "'$nom','$dep','$suel'";
 
 		// Validamos si la inserción fue exitosa
-		if ($sql->insert("empleado", $cols, $val, "")) {
+		if ($sql->insert("empleado", $cols, $val)) {
 			return true; // Retorna verdadero si la inserción fue exitosa
 		} else {
 			return false; // Retorna falso si hubo un error

@@ -3,8 +3,8 @@
 session_start();  
 //comprueba que el usuario esta autenticado
 if ($_SESSION['autenticado'] != "SI"){
-	// si no existe va a la p�gina de autenticado
-	//Para Eliminar una sesi�n en particular. 
+	// si no existe va a la pagina de autenticado
+	//Para Eliminar una sesion en particular. 
 
     unset($_SESSION['Usuario']);//libera la variable de sesi�n registrada
 

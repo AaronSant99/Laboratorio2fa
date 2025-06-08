@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="css/cmxform.css" type="text/css" />
 <link rel="stylesheet" href="Estilos/Techmania.css" type="text/css" />
 <link rel="stylesheet" href="Estilos/general.css"   type="text/css">
-<title>Ejemplo de Prueba del Login</title>
+<title>Login</title>
 
 <script type="text/javascript">
 
