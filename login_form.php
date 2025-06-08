@@ -13,7 +13,7 @@
 <script src="jquery/jquery.validate.js"  type="text/javascript"></script>
 <link rel="shortcut icon"  href="patria/5564844.png">
 
-<link rel="stylesheet" href="css/cmxform.css" type="text/css" />
+<link rel="stylesheet" href="Estilos/cmxform.css" type="text/css" />
 <link rel="stylesheet" href="Estilos/Techmania.css" type="text/css" />
 <link rel="stylesheet" href="Estilos/general.css"   type="text/css">
 <title>Login</title>

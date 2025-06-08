@@ -29,10 +29,10 @@ $menu08=" id=\"current\"";
 	<title>Servicios Web</title>
 	
 	<!-- Styles -->
-	<link rel="stylesheet" href="../css/mainModificado.css">
-	<link rel="stylesheet" href="../css/shortcodes.css">
-	<link rel="stylesheet" type="text/css" href="../css/settings.css" media="screen"/>
-	<link rel="stylesheet" href="../css/color-scheme/turquoise.css">
+	<link rel="stylesheet" href="../Estilos/mainModificado.css">
+	<link rel="stylesheet" href="../Estilos/shortcodes.css">
+	<link rel="stylesheet" type="text/css" href="../Estilos/settings.css" media="screen"/>
+	<link rel="stylesheet" href="../Estilos/turquoise.css">
 	
 
 	<title>Panel de Control</title>    
