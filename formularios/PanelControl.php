@@ -29,12 +29,9 @@ $menu08=" id=\"current\"";
 	<title>Servicios Web</title>
 	
 	<!-- Styles -->
-	<link rel="stylesheet" href="../Estilos/mainModificado.css">
 	<link rel="stylesheet" href="../Estilos/shortcodes.css">
-	<link rel="stylesheet" type="text/css" href="../Estilos/settings.css" media="screen"/>
-	<link rel="stylesheet" href="../Estilos/turquoise.css">
+	<link rel="stylesheet" href="../Estilos/styles.css">
 	
-
 	<title>Panel de Control</title>    
 	
 
@@ -62,7 +59,6 @@ $menu08=" id=\"current\"";
              
                 <?PHP if (isset($_GET['id_mess'])){ ?><p><code>
                 <?php  $idMensaje = $_GET['id_mess']; ?>
-				<font color="#FF0000"><?php echo Mensajes($idMensaje); ?></font> 
                 </code></p>	<?php } ?>
 				      
                
@@ -103,10 +99,7 @@ $menu08=" id=\"current\"";
 				
 				
 				
-				if (isset($_GET['id_mess'])){  $idMensaje = $_GET['id_mess']; ?>
-
-              		
-				<font color="#FF0000"><?php echo Mensajes($idMensaje); ?></font> <?php } else { ?> 
+				if (isset($_GET['id_mess'])){  $idMensaje = $_GET['id_mess']; } else { ?> 
                 <?php echo "El d&iacute;a de hoy es ".$dia." de ".$arrayMes1[$mes]." de ".$AnioActual.".<br>"; ?>
 				<?php } ?>
                 </code></p>	              

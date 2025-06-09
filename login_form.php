@@ -13,9 +13,8 @@
 <script src="jquery/jquery.validate.js"  type="text/javascript"></script>
 <link rel="shortcut icon"  href="patria/5564844.png">
 
-<link rel="stylesheet" href="Estilos/cmxform.css" type="text/css" />
+<link rel="stylesheet" href="Estilos/styles.css" type="text/css" />
 <link rel="stylesheet" href="Estilos/Techmania.css" type="text/css" />
-<link rel="stylesheet" href="Estilos/general.css"   type="text/css">
 <title>Login</title>
 
 <script type="text/javascript">
@@ -65,7 +64,7 @@
 			      <tr>
                     <td colspan="2" align="center">                     
                         <div align="center"><input name="Submit" type="submit" class="clear" value="Buscar" />
-                        (*Dos clic o enter para entrar)</div>
+                        </div>
 	        </tr>
             
            
