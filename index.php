@@ -7,12 +7,13 @@ if (isset($_POST['tolog'])) {
     $usuario = $_POST['usuario'] ?? '';
     $clave = $_POST['contrasena'] ?? '';
 
-    // Buscar el usuario
-    $stmt = $conn->prepare("SELECT id, HashMagic FROM usuarios WHERE usuario = ?");
+    // Buscar el usuario y su secreto 2FA
+    $stmt = $conn->prepare("SELECT id, HashMagic, secret_2fa FROM usuarios WHERE usuario = ?");
     $stmt->bind_param("s", $usuario);
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
+    $stmt->close();
 
     // Contar intentos fallidos recientes (última hora)
     $stmt2 = $conn->prepare("SELECT COUNT(*) FROM intentos_login WHERE usuario = ? AND resultado = 'fallido' AND fecha > DATE_SUB(NOW(), INTERVAL 1 HOUR)");
@@ -26,15 +27,14 @@ if (isset($_POST['tolog'])) {
 
     if ($user && password_verify($clave, $user['HashMagic'])) {
         $_SESSION['usuario_id'] = $user['id'];
-        // Registrar intento login exitoso
+        $_SESSION['Usuario'] = $usuario;
+        $_SESSION['secret_2fa'] = $user['secret_2fa'];  // <---- IMPORTANTE
         registrar_intento_login($conn, $user['id'], $usuario, 'exitoso', null, $cantidad_intentos);
-        // Registrar evento en trazabilidad
         registrar_evento_trazabilidad($conn, $user['id'], 'login');
-        header('Location: panel.php');
+        header('Location: codigo_2fa.php');
         exit();
     } else {
         $motivo = $user ? 'Contraseña incorrecta' : 'Usuario no encontrado';
-        // Registrar intento login fallido
         registrar_intento_login(
             $conn,
             $user ? $user['id'] : null,

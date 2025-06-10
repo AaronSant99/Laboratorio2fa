@@ -40,7 +40,7 @@ class RegistroUsuario {
 
         // Validar contraseña
         if (!SanitizarEntrada::validarPassword($password)) {
-            $errores['clave'] = "La contraseña debe tener al menos 8 caracteres, minimo una mayuscula y solo caracteres permitidos.";
+            $errores['clave'] = "La contraseña debe tener al menos 8 caracteres, mínimo una mayúscula y solo caracteres permitidos.";
         }
 
         // Validaciones básicas
@@ -85,11 +85,9 @@ class RegistroUsuario {
             $_SESSION['Usuario'] = $usuario;
             $_SESSION['secret_2fa'] = $secret;
 
-            // Registrar en trazabilidad
+            // Registrar en trazabilidad (usa mysqli, no PDO)
             $nuevo_id = $this->conn->insert_id;
-            // Usar mysqli para compatibilidad, crear objeto PDO temporal para trazabilidad
-            $pdo = new PDO("mysql:host=localhost;dbname=nombre_base_datos", "usuario", "clave"); 
-            registrar_evento_trazabilidad($pdo, $nuevo_id, 'registro');
+            registrar_evento_trazabilidad($this->conn, $nuevo_id, 'registro');
 
             $qrUrl = GoogleQrUrl::generate($usuario, $secret, 'Autenticador2FA');
 

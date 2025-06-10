@@ -9,7 +9,7 @@ if ($_SESSION['autenticado'] != "SI"){
     unset($_SESSION['Usuario']);//libera la variable de sesi�n registrada
 
 	session_destroy();//elimina la sesi�n actual, elimina cualquier dato de la sesi�n
-	header("location:login.php");
+	header("location: /login_form.php");
 	//salimos de este script
 	exit();
 }

@@ -24,6 +24,7 @@ $g = new GoogleAuthenticator();
 // Validar el código
 if ($g->checkCode($secret, $codigo)) {
     $_SESSION['verificado_2fa'] = true;
+    $_SESSION['autenticado'] = "SI";
     header("Location: formularios/PanelControl.php");
     exit();
 } else {
