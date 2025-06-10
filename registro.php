@@ -2,6 +2,8 @@
 session_start();
 $errores = $_SESSION['errores'] ?? [];
 $valores = $_SESSION['valores'] ?? [];
+// Limpiar errores y valores para que no se muestren en el siguiente acceso
+unset($_SESSION['errores'], $_SESSION['valores']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -10,7 +12,7 @@ $valores = $_SESSION['valores'] ?? [];
     <title>Registro</title>
     <link rel="stylesheet" href="Estilos/estilosregistro.css">
 </head>
-  <body>
+<body>
     <div class="contenedor">
       <h2>Registro</h2>
         <form method="post" action="registrar.php">
@@ -56,6 +58,9 @@ $valores = $_SESSION['valores'] ?? [];
 
             <button type="submit">Registrar</button>
         </form>
+        <?php if (isset($errores['general'])): ?>
+            <div class="error-msg"><?= $errores['general'] ?></div>
+        <?php endif; ?>
     </div>
-  </body>
-  </html>
+</body>
+</html>

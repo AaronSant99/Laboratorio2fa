@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
-$usuario = "ComodinUser7";
-$clave = "comodincontra77"; 
+$usuario = "lab2fa";
+$clave = "lab2fapass"; 
 $bd = "autenticador2fa"; 
 
 $conn = new mysqli($host, $usuario, $clave, $bd);

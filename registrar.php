@@ -1,7 +1,8 @@
 <?php
 require 'conexion.php';
-require 'vendor/autoload.php';
 require_once 'clases/SanitizarEntrada.php';
+require_once 'comunes/utils_auditoria.php';
+require 'vendor/autoload.php';
 
 use Sonata\GoogleAuthenticator\GoogleAuthenticator;
 use Sonata\GoogleAuthenticator\GoogleQrUrl;
@@ -83,6 +84,12 @@ class RegistroUsuario {
             unset($_SESSION['errores'], $_SESSION['valores']); 
             $_SESSION['Usuario'] = $usuario;
             $_SESSION['secret_2fa'] = $secret;
+
+            // Registrar en trazabilidad
+            $nuevo_id = $this->conn->insert_id;
+            // Usar mysqli para compatibilidad, crear objeto PDO temporal para trazabilidad
+            $pdo = new PDO("mysql:host=localhost;dbname=nombre_base_datos", "usuario", "clave"); 
+            registrar_evento_trazabilidad($pdo, $nuevo_id, 'registro');
 
             $qrUrl = GoogleQrUrl::generate($usuario, $secret, 'Autenticador2FA');
 

@@ -1,60 +1,54 @@
 <?php
-session_start();  
-include("clases/mysql.inc.php");	
-include("clases/SanitizarEntrada.php");
-include("comunes/loginfunciones.php");
-include("clases/objLoginAdmin.php");
+include("conexion.php");
+include("comunes/utils_auditoria.php");
+session_start();
 
-$db = new mod_db();
-$tolog = false;
+if (isset($_POST['tolog'])) {
+    $usuario = $_POST['usuario'] ?? '';
+    $clave = $_POST['contrasena'] ?? '';
 
-if (isset($_POST["tolog"])) {
-    $tolog = $_POST["tolog"];
-}
+    // Buscar el usuario
+    $stmt = $conn->prepare("SELECT id, HashMagic FROM usuarios WHERE usuario = ?");
+    $stmt->bind_param("s", $usuario);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
 
-if ($tolog == "true" && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Contar intentos fallidos recientes (última hora)
+    $stmt2 = $conn->prepare("SELECT COUNT(*) FROM intentos_login WHERE usuario = ? AND resultado = 'fallido' AND fecha > DATE_SUB(NOW(), INTERVAL 1 HOUR)");
+    $stmt2->bind_param("s", $usuario);
+    $stmt2->execute();
+    $stmt2->bind_result($cantidad_intentos);
+    $stmt2->fetch();
+    $stmt2->close();
 
-    $Usuario = $_POST['usuario'];
-    $ClaveKey = $_POST['contrasena'];
-    $ipRemoto = $_SERVER['REMOTE_ADDR'];
+    $cantidad_intentos = $cantidad_intentos ?? 0;
 
-    $Logearme = new ValidacionLogin($Usuario, $ClaveKey, $ipRemoto, $db);
-
-    if ($Logearme->logger()) {
-        $Logearme->autenticar();
-
-        if ($Logearme->getIntentoLogin()) {
-
-            $_SESSION['autenticado'] = "SI";
-            $_SESSION['Usuario'] = $Logearme->getUsuario();
-
-            $usuario = $Logearme->getUsuario();
-            $sql = "SELECT id, secret_2fa FROM usuarios WHERE usuario = '" . addslashes($usuario) . "'";
-            $result = $db->query($sql);
-            $row = $result ? $result->fetch(PDO::FETCH_ASSOC) : null;
-
-            if ($row && !empty($row['secret_2fa'])) {
-                $_SESSION['secret_2fa'] = $row['secret_2fa'];
-                $_SESSION['usuario_id'] = $row['id'];
-                $Logearme->registrarIntentos();
-                redireccionar("codigo_2fa.php");
-            } else {
-                echo "❌ No se encontró un secreto 2FA válido para este usuario.";
-                exit();
-            }
-
-        } else {
-            $Logearme->registrarIntentos();
-            $_SESSION["emsg"] = 1;
-            redireccionar("login.php");
-        }
-
+    if ($user && password_verify($clave, $user['HashMagic'])) {
+        $_SESSION['usuario_id'] = $user['id'];
+        // Registrar intento login exitoso
+        registrar_intento_login($conn, $user['id'], $usuario, 'exitoso', null, $cantidad_intentos);
+        // Registrar evento en trazabilidad
+        registrar_evento_trazabilidad($conn, $user['id'], 'login');
+        header('Location: panel.php');
+        exit();
     } else {
+        $motivo = $user ? 'Contraseña incorrecta' : 'Usuario no encontrado';
+        // Registrar intento login fallido
+        registrar_intento_login(
+            $conn,
+            $user ? $user['id'] : null,
+            $usuario,
+            'fallido',
+            $motivo,
+            $cantidad_intentos + 1
+        );
         $_SESSION["emsg"] = 1;
-        redireccionar("login.php");
+        header("Location: login.php");
+        exit();
     }
-
 } else {
-    redireccionar("login.php");
+    header("Location: login.php");
+    exit();
 }
 ?>
